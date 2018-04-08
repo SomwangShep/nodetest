@@ -71,35 +71,23 @@ app.get('/', (req, res)=>
     // console.log('here is questions in render:  '+q);
   });
 
-  // childProcess.stderr.on('data', function (data)
-  // {
-  //   err = data.toString();
-  //   console.log('[spawn] stderr: ', err);
-  //   console.log('here is questions in stderr:  '+q);
-  // });
+  childProcess.stderr.on('data', function (data)
+  {
+    err = data.toString();
+    console.log('[spawn] stderr: ', err);
+  });
 
-  // promise.then(function ()
-  // {
-  //   status = "Complete!";
-  //   console.log(status);
-  // })
-  // .catch(function (err)
-  // {
-  //   status = err;
-  //   console.error('[spawn] ERROR: ', err);
-  // });
-
-  console.log('here is questions before render:  '+q);
+  promise.then(function ()
+  {
+    status = "Complete!";
+    console.log(status);
+  })
+  .catch(function (err)
+  {
+    status = err;
+    console.error('[spawn] ERROR: ', err);
+  });
   // =============== End execute java file =========================//
-
-//   res.render('home.hbs',{
-//     pageTitle: 'Home Page',
-//     welcomeMessage: 'Welcome to my website',
-//     quetion: `${q}`,
-//     error: `${err}`,
-//     status: `${status}`
-//   });
-//   console.log('here is questions in render:  '+q);
 });
 
 app.get('/about',(req,res) => {
