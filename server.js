@@ -12,8 +12,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 // -------- global varible for quiz ----------------------//
-var ans = "";//last one is ans (length-1)
-var ans1 = "";//user answer
+var ansJava0 = "";//last one is ans (length-1)
+var ansUsr0 = "";//user answer
 
 var totalScore = 0.0;//running totalScore
 var numberOfTest = 0.0;
@@ -58,7 +58,7 @@ app.get('/', (req, res)=>
   // =============== Start execute java file =========================//
   var spawn = require('child-process-promise').spawn;
   var fn = __dirname + '/public/GenerateQuiz1Question.jar';//GenerateQuiz1Question
-  var fn2 = __dirname + '/public/Quiz1Tester.jar';//Quiz1Tester
+  var fn2 = __dirname + '/public/GenerateQuiz1Question.jar';//Quiz1Tester
 
   var promise = spawn('java', ['-jar',fn]);
   var promise2 = spawn('java', ['-jar',fn2]);
@@ -66,25 +66,22 @@ app.get('/', (req, res)=>
   var childProcess2 = promise2.childProcess;
 
   var q = "";//return from java
-  var err = "";//error from childProcess
-  var status = "";//results frpom promise
 
   var limit = 8;//max of number varible in java return (need ask with Mike)
   var prt = "";//system.out.print ((length-2)
   var qu1 = [];//array varible from jav return
 
-  childProcess2.stdout.on('data', function (data)
+  var qs1 = childProcess2.stdout.on('data', function (data)
   {
-    var qtest = data.toString();
-    // q = data.toString().substring(50);//remove 'Given the information below, what will be printed?'
-    var q = qtest.split("Given the information below, what will be printed?")
-    // console.log("---------------------------------");
-    console.log(qtest);
-    console.log(`-------somwang:------ ${q.length}`);
-    // ----------------------- set varibles -----------------------
-    // ans = q[q.length-1];
-    // prt = q[q.length-2];
+    //doing something
+
+    // var originalNoteString = JSON.stringify(originalNote);
+    // fs.writeFileSync('notes.json', originalNoteString);
+    // console.log(qtest);
   });
+  // fs.writeFileSync('notes.json',qs1)
+  // var originalNoteString = JSON.stringify(qs1,null,4);
+  console.log(`qs1 ${qs1}`);
 // ============== End testing ================================
   childProcess.stdout.on('data', function (data)
   {
@@ -94,57 +91,51 @@ app.get('/', (req, res)=>
     q = qtest.substring(50);
     q = q.split(";")
     // ----------------------- set varibles -----------------------
-    ans = q[q.length-1].substring(1);
+    ansJava0 = q[q.length-1].substring(1);
     prt = q[q.length-2].trim();
-    // --------------- for varibles will be use in questions ------
-    // initiallize qu1 array with empty toString
+    // initiallize qu1 array with empty String
     for (var i = 0; i < 10; i++)
     {
       qu1[i] = "";
     }
     for (var i = 0; i < q.length-2;i++)
     {
-        qu1[i] = q[i];
+        qu1[i] = q[i] + ";";
     }
 
     res.render('home.hbs',
     {
       pageTitle: 'Java Chapter1 Quiz',
-      quetion0: `${qu1[0]}`,
-      quetion1: `${qu1[1]}`,
-      quetion2: `${qu1[2]}`,
-      quetion3: `${qu1[3]}`,
-      quetion4: `${qu1[4]}`,
-      quetion5: `${qu1[5]}`,
-      quetion6: `${qu1[6]}`,
-      quetion7: `${qu1[7]}`,
+      v0: `${qu1[0]}`,
+      v1: `${qu1[1]}`,
+      v2: `${qu1[2]}`,
+      v3: `${qu1[3]}`,
+      v4: `${qu1[4]}`,
+      v5: `${qu1[5]}`,
+      v6: `${qu1[6]}`,
+      v7: `${qu1[7]}`,
       prt: `${prt}`,
-      ans: `${ans}`,
-      ans1: `${ans1}`,
+      ansJava0: `${ansJava0}`,
+      ansUsr0: `${ansUsr0}`,
       ntest: `${numberOfTest}`,
       tscore: `${totalScore}`,
       corr: `${corr}`,
-      incorr: `${incorr}`,
-      error: `${err}`,
-      status: `${status}`
+      incorr: `${incorr}`
     });
   });
 
   childProcess.stderr.on('data', function (data)
   {
-    err = data.toString();
-    // console.log('[spawn] stderr: ', err);
+    console.log('[spawn] stderr: ', data.toString());
   });
 
   promise.then(function ()
   {
-    status = "Complete!";
-    // console.log(status);
+    console.log("Complete!");
   })
   .catch(function (err)
   {
-    status = err;
-    // console.error('[spawn] ERROR: ', err);
+    console.error('[spawn] ERROR: ', err);
   });
   // =============== End execute java file =========================//
 });
@@ -153,16 +144,16 @@ app.post('/ansChk',(req,res) => {
   corr = "";
   incorr = "";
   numberOfTest = numberOfTest +1;
-  ans1 = req.body.ans;
+  ansUsr0 = req.body.ans;
 
-  console.log(`'${ans1}' user input`);
-  console.log(`'${ans}' from java`);
-  if (ans1 == ans){
+  console.log(`'${ansUsr0}' user input`);
+  console.log(`'${ansJava0}' from java`);
+  if (ansUsr0 == ansJava0){
     totalScore = totalScore+1;
     corr = "Great Job!";
   }
   else {
-    incorr = `Incorrect! The correct answer is '${ans}'`;
+    incorr = `Incorrect! The correct answer is '${ansJava0}'`;
   }
   res.redirect('back');
 });
