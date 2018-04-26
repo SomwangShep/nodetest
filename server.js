@@ -67,6 +67,11 @@ hbs.registerHelper('screamIt',(text)=>
   return text.toUpperCase();
 });
 
+app.get('/temp', (req, res)=>
+{
+
+});
+
 app.get('/', (req, res)=>
 {
   // =============== Start execute java file =========================//
@@ -133,14 +138,14 @@ app.get('/', (req, res)=>
         var t = q[q.length-1].trim();
         // console.log(`answer java: ${t}`);
         ansJava[j] = t.substring(1,t.length-1);
-        prt[j] = q[q.length-2].trim();
+        prt[j] = q[q.length-2].trim() + ";";
       }
     }
     // -------- End getting data -------------------------
     // ----------- Start Render form -------------------------------
       res.render('home.hbs',
       {
-        pageTitle: 'Java Chapter1 Quiz',
+        pageTitle: 'Chapter 1',
         v0_0: `${qu0[0]}`,
         v0_1: `${qu0[1]}`,
         v0_2: `${qu0[2]}`,
@@ -253,6 +258,7 @@ app.get('/', (req, res)=>
 // =============== End app.get('/' =========================//
 
 app.post('/ansChk',(req,res) => {
+  totalScore = 0;//reset the score
   //reset correct and incorrect
   for (var i = 0; i < 10; i++)
   {
@@ -285,7 +291,7 @@ app.post('/ansChk',(req,res) => {
   // res.redirect('back');
   res.render('ans.hbs',
   {
-    pageTitle: 'Java Chapter1 Quiz',
+    pageTitle: 'Chapter 1',
     v0_0: `${qu0[0]}`,
     v0_1: `${qu0[1]}`,
     v0_2: `${qu0[2]}`,
@@ -418,7 +424,11 @@ app.post('/ansChk',(req,res) => {
     incorr9: `${incorr[9]}`,
     tscore: `${totalScore}`
   });
-});
+}); //end ansChk
+
+// app.post('/retest',(req,res) => {
+//
+// });
 
 app.get('/about',(req,res) => {
   res.render('about.hbs',{
