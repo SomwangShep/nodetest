@@ -76,7 +76,8 @@ app.get('/', (req, res)=>
 {
   // =============== Start execute java file =========================//
   var spawn = require('child-process-promise').spawn;
-  var fn = __dirname + '/public/GenerateQuiz1Question.jar';//GenerateQuiz1Question
+  // var fn = __dirname + '/public/GenerateQuiz1Question.jar';//GenerateQuiz1Question
+  var fn = './GenerateQuiz1Question.jar';//GenerateQuiz1Question
   var promise = spawn('java', ['-jar',fn]);
   var childProcess = promise.childProcess;
 
