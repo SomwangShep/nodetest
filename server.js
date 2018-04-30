@@ -67,12 +67,12 @@ hbs.registerHelper('screamIt',(text)=>
   return text.toUpperCase();
 });
 
-app.get('/temp', (req, res)=>
+app.get('/', (req, res)=>
 {
-
+  res.send('Hello there!');
 });
 
-app.get('/', (req, res)=>
+app.get('/quiz1', (req, res)=>
 {
   // =============== Start execute java file =========================//
   var spawn = require('child-process-promise').spawn;
@@ -144,7 +144,7 @@ app.get('/', (req, res)=>
     }
     // -------- End getting data -------------------------
     // ----------- Start Render form -------------------------------
-      res.render('home.hbs',
+      res.render('quiz1.hbs',
       {
         pageTitle: 'Chapter 1',
         v0_0: `${qu0[0]}`,
@@ -258,7 +258,7 @@ app.get('/', (req, res)=>
 });
 // =============== End app.get('/' =========================//
 
-app.post('/ansChk',(req,res) => {
+app.post('/quiz1ans',(req,res) => {
   totalScore = 0;//reset the score
   //reset correct and incorrect
   for (var i = 0; i < 10; i++)
@@ -290,7 +290,7 @@ app.post('/ansChk',(req,res) => {
     }
   }
   // res.redirect('back');
-  res.render('ans.hbs',
+  res.render('quiz1ans.hbs',
   {
     pageTitle: 'Chapter 1',
     v0_0: `${qu0[0]}`,
